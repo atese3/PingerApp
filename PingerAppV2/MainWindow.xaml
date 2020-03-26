@@ -2,36 +2,77 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         ResizeMode="NoResize"
+
         Title="Pinger App V2" Height="350" Width="588">
+    <Window.Resources>
+        <Style x:Key="myHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Visibility" Value="Collapsed" />
+        </Style>
+    </Window.Resources>
     <Grid x:Name="grid">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="StartStateGroup">
                 <VisualState x:Name="StartStateOff"/>
-                <VisualState x:Name="StartStateOn"/>
+                <VisualState x:Name="StartStateOn">
+                    <Storyboard>
+                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="BtnStart" RepeatBehavior="Forever">
+                            <EasingColorKeyFrame KeyTime="0" Value="Red"/>
+                            <EasingColorKeyFrame KeyTime="0:0:1" Value="#FFDDDDDD"/>
+                        </ColorAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical">
             <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Orientation="Horizontal">
-                <Button x:Name="BtnSelectFoler" Height="30" Width="100" Content="Select Folder" Click="BtnSelectFoler_OnClick"></Button>
-                <Label Margin="10,0,0,0" Content="Delimeter: " />
-                <TextBox x:Name="TxtDelimeter" Margin="10,0,0,0" Width="100" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
-                <Button x:Name="BtnStart" Margin="10,0,0,0" Height="30" Width="100" Content="Start" Click="BtnStart_OnClick"></Button>
+                <Grid>
+                    <Button x:Name="BtnSelectFoler" Height="30" Width="100" Content="Select Folder" Click="BtnSelectFoler_OnClick"></Button>
+                    <Rectangle Visibility="Collapsed" x:Name="RectangleSelect" Fill="LightGray" Opacity=".6" Height="30" Width="100" ></Rectangle>
+                </Grid>
+                <!--<Label Margin="10,0,0,0" Content="Delimeter: " />-->
+                <!--<TextBox x:Name="TxtDelimeter" Margin="10,0,0,0" Width="100" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>-->
+                <Grid>
+                    <Button x:Name="BtnStart" Margin="10,0,0,0" Height="30" Width="100" Content="Start" Click="BtnStart_OnClick"></Button>
+                    <Rectangle Margin="10,0,0,0" Visibility="Collapsed" x:Name="RectangleStart" Fill="LightGray" Opacity=".6" Height="30" Width="100" ></Rectangle>
+                </Grid>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Bottom" x:Name="StackPanelProgress" Visibility="Collapsed">
+                    <Label x:Name="LabelProgress" Margin="10,0,0,0"  Width="320" Height="24" Content="%100" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
+                    <Rectangle HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="RectangleProgress" Fill="Green" Width="320" Margin="10,0,0,0" Height="7"/>
+                </StackPanel>
             </StackPanel>
             <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0" Orientation="Horizontal">
                 <StackPanel Orientation="Vertical">
                     <Label VerticalAlignment="Top" HorizontalAlignment="Center"  Content="All Devices"/>
-                    <ListView x:Name="ListAllDevices" ItemsSource="{Binding DeviceIPs}" Width="175" Height="200" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+                    <ListView x:Name="ListAllDevices" ItemsSource="{Binding DeviceIPs}" Width="175" Height="200" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}">
+                                <GridViewColumn DisplayMemberBinding="{Binding}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </StackPanel>
                 <StackPanel Margin="10,0,0,0" Orientation="Vertical">
                     <Label VerticalAlignment="Top" HorizontalAlignment="Center" Content="Success Devices"/>
-                    <ListView x:Name="ListSuccessDevices" ItemsSource="{Binding SuccessfulIp}" Width="175" Height="200" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+                    <ListView x:Name="ListSuccessDevices" ItemsSource="{Binding SuccessfulIp}" Width="175" Height="200" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}">
+                                <GridViewColumn DisplayMemberBinding="{Binding Key}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </StackPanel>
                 <StackPanel Margin="10,0,0,0" Orientation="Vertical">
                     <Label VerticalAlignment="Top" HorizontalAlignment="Center" Content="Failed Devices"/>
-                    <ListView x:Name="ListFailedDevices" ItemsSource="{Binding FailedIp}" Width="175" Height="200" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+                    <ListView x:Name="ListFailedDevices" ItemsSource="{Binding FailedIp}" Width="175" Height="200" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}">
+                                <GridViewColumn DisplayMemberBinding="{Binding Key}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </StackPanel>
-
             </StackPanel>
+            <Button x:Name="ButtonExport" HorizontalAlignment="Right" IsEnabled="False" VerticalAlignment="Top" Margin="0,10,0,0" Content="Export" Height="30" Width="100" Click="ButtonExport_OnClick"></Button>
         </StackPanel>
     </Grid>
 </Window>
